@@ -1,6 +1,8 @@
 #!/bin/bash
 echo "Hello world 24.1!"
 /android/sdk/launch-emulator.sh
+sleep 100
+/android/sdk/platform-tools/adb shell getprop dev.bootcomplete
 # sleep $[ ( $RANDOM % 30 )  + 1 ]s
 # /android/sdk/launch-emulator.sh > launch-emulator.log 2>&1 &
 # sleep 120
