@@ -2,7 +2,7 @@
 echo "Hello world 25.111!"
 /android/sdk/launch-emulator.sh > launch-emulator.log 2>&1 &
 echo "Hello world 25.2!"
-sleep 100
+while [ "`/android/sdk/platform-tools/adb shell getprop sys.boot_completed | tr -d '\r' `" != "1" ] ; do sleep 1; done
 echo "Hello world 25.3!"
 /android/sdk/platform-tools/adb shell getprop dev.bootcomplete
 /android/sdk/platform-tools/adb install /app.apk
