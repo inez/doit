@@ -8,6 +8,8 @@ echo "Hello world 25.3!"
 /android/sdk/platform-tools/adb install /app.apk
 /android/sdk/platform-tools/adb install /androidTest.apk
 echo "Hello world 25.4!"
+/android/sdk/platform-tools/adb shell am instrument -w -m --no-window-animation -e debug false -e class com.squareup.instrumentation.tests.ActivateSquareCardSwipeTest#swipeForCardVerification com.squareup.instrumentation
+echo "Hello world 25.5!"
 # sleep $[ ( $RANDOM % 30 )  + 1 ]s
 # /android/sdk/launch-emulator.sh > launch-emulator.log 2>&1 &
 # sleep 120
