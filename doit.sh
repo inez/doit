@@ -1,5 +1,5 @@
 #!/bin/bash
-echo "Hello world 25.1!"
+echo "Hello world 25.11!"
 /android/sdk/launch-emulator.sh > launch-emulator.log 2>&1 &
 echo "Hello world 25.2!"
 sleep 100
