@@ -1,4 +1,4 @@
-echo "Hello world!"
+echo "Hello world 24!"
 sleep $[ ( $RANDOM % 30 )  + 1 ]s
 /android/sdk/launch-emulator.sh > launch-emulator.log 2>&1 &
 sleep 120
