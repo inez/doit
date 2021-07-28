@@ -43,9 +43,24 @@ begin
 rescue Timeout::Error
   puts 'process not finished in time, killing it'
   Process.kill('TERM', pid)
+  sleep 3
 end
 
 puts 'Second attempt to wait-for-device'
+pid = Process.spawn("ANDROID_ADB_SERVER_PORT=#{ANDROID_ADB_SERVER_PORT} /opt/android-sdk/platform-tools/adb -s emulator-#{PORT1} wait-for-device shell 'while [[ -z $(getprop sys.boot_completed) ]]; do sleep 1; done;'")
+begin
+  Timeout.timeout(45) do
+    puts 'waiting for the process to end'
+    Process.wait(pid)
+    puts 'process finished in time'
+  end
+rescue Timeout::Error
+  puts 'process not finished in time, killing it'
+  Process.kill('TERM', pid)
+  sleep 3
+end
+
+puts 'Third attempt to wait-for-device'
 pid = Process.spawn("ANDROID_ADB_SERVER_PORT=#{ANDROID_ADB_SERVER_PORT} /opt/android-sdk/platform-tools/adb -s emulator-#{PORT1} wait-for-device shell 'while [[ -z $(getprop sys.boot_completed) ]]; do sleep 1; done;'")
 begin
   Timeout.timeout(45) do
