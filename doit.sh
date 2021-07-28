@@ -1,3 +1,5 @@
+require 'timeout'
+
 EVEN_RANDOM_NUMBER = 1024 + rand(0..20000) * 2
 PORT1 = EVEN_RANDOM_NUMBER
 PORT2 = EVEN_RANDOM_NUMBER + 1
@@ -19,8 +21,32 @@ Thread.new {
 
 sleep 30
 
-`ANDROID_ADB_SERVER_PORT=#{ANDROID_ADB_SERVER_PORT} /opt/android-sdk/platform-tools/adb -s emulator-#{PORT1} wait-for-device shell 'while [[ -z $(getprop sys.boot_completed) ]]; do sleep 1; done;'`
-raise unless $?.success?
+puts 'First attempt to wait-for-device'
+pid = Process.spawn("ANDROID_ADB_SERVER_PORT=#{ANDROID_ADB_SERVER_PORT} /opt/android-sdk/platform-tools/adb -s emulator-#{PORT1} wait-for-device shell 'while [[ -z $(getprop sys.boot_completed) ]]; do sleep 1; done;'")
+begin
+  Timeout.timeout(45) do
+    puts 'waiting for the process to end'
+    Process.wait(pid)
+    puts 'process finished in time'
+  end
+rescue Timeout::Error
+  puts 'process not finished in time, killing it'
+  Process.kill('TERM', pid)
+end
+
+puts 'Second attempt to wait-for-device'
+pid = Process.spawn("ANDROID_ADB_SERVER_PORT=#{ANDROID_ADB_SERVER_PORT} /opt/android-sdk/platform-tools/adb -s emulator-#{PORT1} wait-for-device shell 'while [[ -z $(getprop sys.boot_completed) ]]; do sleep 1; done;'")
+begin
+  Timeout.timeout(45) do
+    puts 'waiting for the process to end'
+    Process.wait(pid)
+    puts 'process finished in time'
+  end
+rescue Timeout::Error
+  puts 'process not finished in time, killing it'
+  Process.kill('TERM', pid)
+  raise
+end
 
 sleep 3
 
