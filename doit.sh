@@ -42,7 +42,7 @@ timeout 3 /opt/android-sdk/platform-tools/adb start-server
 sleep 2
 /opt/android-sdk/emulator/emulator -ports $PORT1,$PORT2 -avd EmulatorInDocker -skip-adb-auth -no-window -gpu swiftshader_indirect -no-snapshot -noaudio -no-boot-anim > /root/emulator.log 2>&1 &
 sleep 2
-timeout 30 /opt/android-sdk/platform-tools/adb -s emulator-$PORT1 wait-for-device shell 'while [[ -z $(getprop sys.boot_completed) ]]; do sleep 1; done;'
+timeout 90 /opt/android-sdk/platform-tools/adb -s emulator-$PORT1 wait-for-device shell 'while [[ -z $(getprop sys.boot_completed) ]]; do sleep 1; done;'
 sleep 2
 timeout 15 /opt/android-sdk/platform-tools/adb -s emulator-$PORT1 install /root/app.apk
 sleep 2
