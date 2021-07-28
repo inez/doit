@@ -14,6 +14,7 @@ begin
   `ANDROID_ADB_SERVER_PORT=#{ANDROID_ADB_SERVER_PORT} /opt/android-sdk/platform-tools/adb start-server`
   raise unless $?.success?
 rescue
+  puts "In rescue"
   if (retries += 1) < 10
     sleep 3
     retry
