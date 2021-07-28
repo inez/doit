@@ -11,9 +11,11 @@ puts "ANDROID_ADB_SERVER_PORT: #{ANDROID_ADB_SERVER_PORT}"
 
 `ANDROID_ADB_SERVER_PORT=#{ANDROID_ADB_SERVER_PORT} /opt/android-sdk/platform-tools/adb start-server`
 unless $?.success?
+  puts "Going to retry"
   sleep 3
   `ANDROID_ADB_SERVER_PORT=#{ANDROID_ADB_SERVER_PORT} /opt/android-sdk/platform-tools/adb start-server`
   unless $?.success?
+    puts "Going to retry"
     sleep 3
     `ANDROID_ADB_SERVER_PORT=#{ANDROID_ADB_SERVER_PORT} /opt/android-sdk/platform-tools/adb start-server`
     unless $?.success?
