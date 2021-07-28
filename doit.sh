@@ -61,11 +61,13 @@ end
 
 sleep 3
 
+puts "Installing app"
 `ANDROID_ADB_SERVER_PORT=#{ANDROID_ADB_SERVER_PORT} /opt/android-sdk/platform-tools/adb -s emulator-#{PORT1} install /root/app.apk`
 raise unless $?.success?
 
 sleep 3
 
+puts "Installing androidTest"
 `ANDROID_ADB_SERVER_PORT=#{ANDROID_ADB_SERVER_PORT} /opt/android-sdk/platform-tools/adb -s emulator-#{PORT1} install /root/androidTest.apk`
 raise unless $?.success?
 
