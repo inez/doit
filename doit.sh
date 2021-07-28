@@ -62,14 +62,59 @@ end
 sleep 3
 
 puts "Installing app"
-`ANDROID_ADB_SERVER_PORT=#{ANDROID_ADB_SERVER_PORT} /opt/android-sdk/platform-tools/adb -s emulator-#{PORT1} install /root/app.apk`
-raise unless $?.success?
+
+pid = Process.spawn("ANDROID_ADB_SERVER_PORT=#{ANDROID_ADB_SERVER_PORT} /opt/android-sdk/platform-tools/adb -s emulator-#{PORT1} install /root/app.apk")
+begin
+  Timeout.timeout(15) do
+    puts 'waiting for the process to end'
+    Process.wait(pid)
+    puts 'process finished in time'
+  end
+rescue Timeout::Error
+  puts 'process not finished in time, killing it'
+  Process.kill('TERM', pid)
+  sleep 3
+  pid = Process.spawn("ANDROID_ADB_SERVER_PORT=#{ANDROID_ADB_SERVER_PORT} /opt/android-sdk/platform-tools/adb -s emulator-#{PORT1} install /root/app.apk")
+  begin
+    Timeout.timeout(15) do
+      puts 'waiting for the process to end'
+      Process.wait(pid)
+      puts 'process finished in time'
+    end
+  rescue Timeout::Error
+    puts 'process not finished in time, killing it'
+    Process.kill('TERM', pid)
+    raise
+  end
+end
 
 sleep 3
 
 puts "Installing androidTest"
-`ANDROID_ADB_SERVER_PORT=#{ANDROID_ADB_SERVER_PORT} /opt/android-sdk/platform-tools/adb -s emulator-#{PORT1} install /root/androidTest.apk`
-raise unless $?.success?
+pid = Process.spawn("ANDROID_ADB_SERVER_PORT=#{ANDROID_ADB_SERVER_PORT} /opt/android-sdk/platform-tools/adb -s emulator-#{PORT1} install /root/androidTest.apk")
+begin
+  Timeout.timeout(15) do
+    puts 'waiting for the process to end'
+    Process.wait(pid)
+    puts 'process finished in time'
+  end
+rescue Timeout::Error
+  puts 'process not finished in time, killing it'
+  Process.kill('TERM', pid)
+  sleep 3
+  pid = Process.spawn("ANDROID_ADB_SERVER_PORT=#{ANDROID_ADB_SERVER_PORT} /opt/android-sdk/platform-tools/adb -s emulator-#{PORT1} install /root/androidTest.apk")
+  begin
+    Timeout.timeout(15) do
+      puts 'waiting for the process to end'
+      Process.wait(pid)
+      puts 'process finished in time'
+    end
+  rescue Timeout::Error
+    puts 'process not finished in time, killing it'
+    Process.kill('TERM', pid)
+    raise
+  end
+end
 
 puts "About to start tests"
 
