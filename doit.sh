@@ -3,6 +3,10 @@ PORT1 = EVEN_RANDOM_NUMBER
 PORT2 = EVEN_RANDOM_NUMBER + 1
 ANDROID_ADB_SERVER_PORT = EVEN_RANDOM_NUMBER + 2
 
+puts "PORT1: #{PORT1}"
+puts "PORT2: #{PORT2}"
+puts "ANDROID_ADB_SERVER_PORT: #{ANDROID_ADB_SERVER_PORT}"
+
 `ANDROID_ADB_SERVER_PORT=#{ANDROID_ADB_SERVER_PORT} /opt/android-sdk/platform-tools/adb start-server`
 
 sleep 1
@@ -22,5 +26,7 @@ sleep 3
 sleep 3
 
 `ANDROID_ADB_SERVER_PORT=#{ANDROID_ADB_SERVER_PORT} /opt/android-sdk/platform-tools/adb -s emulator-#{PORT1} install /root/androidTest.apk`
+
+puts "About to start tests"
 
 `ANDROID_ADB_SERVER_PORT=#{ANDROID_ADB_SERVER_PORT} /opt/android-sdk/platform-tools/adb -s emulator-#{PORT1} shell am instrument -w -m --no-window-animation -e debug false -e class com.squareup.instrumentation.tests.ActivateSquareCardSwipeTest#swipeForCardVerification com.squareup.instrumentation > /root/instrument.log`
