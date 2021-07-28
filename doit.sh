@@ -39,5 +39,5 @@ raise unless $?.success?
 
 puts "Done with tests"
 
-`tail -100 /root/emulator.log`
-`tail -100 /root/instrument.log`
+puts `tail -100 /root/emulator.log`
+puts `tail -100 /root/instrument.log`
