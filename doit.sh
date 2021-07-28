@@ -69,10 +69,25 @@ raise unless $?.success?
 
 puts "About to start tests"
 
-`ANDROID_ADB_SERVER_PORT=#{ANDROID_ADB_SERVER_PORT} /opt/android-sdk/platform-tools/adb -s emulator-#{PORT1} shell am instrument -w -m --no-window-animation -e debug false -e class com.squareup.instrumentation.tests.ActivateSquareCardSwipeTest#swipeForCardVerification com.squareup.instrumentation > /root/instrument.log`
-raise unless $?.success?
+
+pid = Process.spawn("ANDROID_ADB_SERVER_PORT=#{ANDROID_ADB_SERVER_PORT} /opt/android-sdk/platform-tools/adb -s emulator-#{PORT1} shell am instrument -w -m --no-window-animation -e debug false -e class com.squareup.instrumentation.tests.ActivateSquareCardSwipeTest#swipeForCardVerification com.squareup.instrumentation > /root/instrument.log")
+begin
+  Timeout.timeout(300) do
+    puts 'waiting for the process to end'
+    Process.wait(pid)
+    puts 'process finished in time'
+  end
+rescue Timeout::Error
+  puts 'process not finished in time, killing it'
+  Process.kill('TERM', pid)
+  puts "Done with tests the bad way"
+  puts "EMULATOR"
+  puts `tail -250 /root/emulator.log`
+  puts "INSTRUMENT"
+  puts `tail -250 /root/instrument.log`
+  raise
+end
 
 puts "Done with tests"
-
 puts `tail -100 /root/emulator.log`
 puts `tail -100 /root/instrument.log`
