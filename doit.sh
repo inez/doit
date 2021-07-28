@@ -30,3 +30,8 @@ sleep 3
 puts "About to start tests"
 
 `ANDROID_ADB_SERVER_PORT=#{ANDROID_ADB_SERVER_PORT} /opt/android-sdk/platform-tools/adb -s emulator-#{PORT1} shell am instrument -w -m --no-window-animation -e debug false -e class com.squareup.instrumentation.tests.ActivateSquareCardSwipeTest#swipeForCardVerification com.squareup.instrumentation > /root/instrument.log`
+
+puts "Done with tests"
+
+`tail -100 /root/emulator.log`
+`tail -100 /root/instrument.log`
