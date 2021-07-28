@@ -10,8 +10,17 @@ puts "PORT2: #{PORT2}"
 puts "ANDROID_ADB_SERVER_PORT: #{ANDROID_ADB_SERVER_PORT}"
 
 `ANDROID_ADB_SERVER_PORT=#{ANDROID_ADB_SERVER_PORT} /opt/android-sdk/platform-tools/adb start-server`
-
-raise unless $?.success?
+unless $?.success?
+  sleep 3
+  `ANDROID_ADB_SERVER_PORT=#{ANDROID_ADB_SERVER_PORT} /opt/android-sdk/platform-tools/adb start-server`
+  unless $?.success?
+    sleep 3
+    `ANDROID_ADB_SERVER_PORT=#{ANDROID_ADB_SERVER_PORT} /opt/android-sdk/platform-tools/adb start-server`
+    unless $?.success?
+      raise
+    end
+  end
+end
 
 sleep 1
 
