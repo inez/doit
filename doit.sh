@@ -9,6 +9,8 @@ puts "ANDROID_ADB_SERVER_PORT: #{ANDROID_ADB_SERVER_PORT}"
 
 `ANDROID_ADB_SERVER_PORT=#{ANDROID_ADB_SERVER_PORT} /opt/android-sdk/platform-tools/adb start-server`
 
+raise unless $?.success?
+
 sleep 1
 
 Thread.new {
@@ -18,18 +20,22 @@ Thread.new {
 sleep 30
 
 `ANDROID_ADB_SERVER_PORT=#{ANDROID_ADB_SERVER_PORT} /opt/android-sdk/platform-tools/adb -s emulator-#{PORT1} wait-for-device shell 'while [[ -z $(getprop sys.boot_completed) ]]; do sleep 1; done;'`
+raise unless $?.success?
 
 sleep 3
 
 `ANDROID_ADB_SERVER_PORT=#{ANDROID_ADB_SERVER_PORT} /opt/android-sdk/platform-tools/adb -s emulator-#{PORT1} install /root/app.apk`
+raise unless $?.success?
 
 sleep 3
 
 `ANDROID_ADB_SERVER_PORT=#{ANDROID_ADB_SERVER_PORT} /opt/android-sdk/platform-tools/adb -s emulator-#{PORT1} install /root/androidTest.apk`
+raise unless $?.success?
 
 puts "About to start tests"
 
 `ANDROID_ADB_SERVER_PORT=#{ANDROID_ADB_SERVER_PORT} /opt/android-sdk/platform-tools/adb -s emulator-#{PORT1} shell am instrument -w -m --no-window-animation -e debug false -e class com.squareup.instrumentation.tests.ActivateSquareCardSwipeTest#swipeForCardVerification com.squareup.instrumentation > /root/instrument.log`
+raise unless $?.success?
 
 puts "Done with tests"
 
