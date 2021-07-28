@@ -9,20 +9,19 @@ puts "PORT1: #{PORT1}"
 puts "PORT2: #{PORT2}"
 puts "ANDROID_ADB_SERVER_PORT: #{ANDROID_ADB_SERVER_PORT}"
 
-`ANDROID_ADB_SERVER_PORT=#{ANDROID_ADB_SERVER_PORT} /opt/android-sdk/platform-tools/adb start-server`
-unless $?.success?
-  puts "Going to retry"
-  sleep 3
+begin
+  retries ||= 0
   `ANDROID_ADB_SERVER_PORT=#{ANDROID_ADB_SERVER_PORT} /opt/android-sdk/platform-tools/adb start-server`
-  unless $?.success?
-    puts "Going to retry"
+  raise unless $?.success?
+rescue
+  if (retries += 1) < 10
     sleep 3
-    `ANDROID_ADB_SERVER_PORT=#{ANDROID_ADB_SERVER_PORT} /opt/android-sdk/platform-tools/adb start-server`
-    unless $?.success?
-      raise
-    end
+    retry
+  else
+    raise
   end
 end
+
 
 sleep 1
 
