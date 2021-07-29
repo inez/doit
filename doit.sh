@@ -154,7 +154,7 @@ rescue Timeout::Error
   puts "INSTRUMENT"
   puts `tail -250 /root/instrument.log`
   puts "LOGCAT"
-  `ANDROID_ADB_SERVER_PORT=#{ANDROID_ADB_SERVER_PORT} /opt/android-sdk/platform-tools/adb -s emulator-#{PORT1} logcat > /root/logcat.log`
+  `ANDROID_ADB_SERVER_PORT=#{ANDROID_ADB_SERVER_PORT} /opt/android-sdk/platform-tools/adb -s emulator-#{PORT1} logcat -d > /root/logcat.log`
   puts `tail -100 /root/logcat.log`
   raise
 end
@@ -163,7 +163,7 @@ puts "Done with tests"
 puts `tail -100 /root/emulator.log`
 puts `tail -100 /root/instrument.log`
 puts "LOGCAT"
-`ANDROID_ADB_SERVER_PORT=#{ANDROID_ADB_SERVER_PORT} /opt/android-sdk/platform-tools/adb -s emulator-#{PORT1} logcat > /root/logcat.log`
+`ANDROID_ADB_SERVER_PORT=#{ANDROID_ADB_SERVER_PORT} /opt/android-sdk/platform-tools/adb -s emulator-#{PORT1} logcat -d > /root/logcat.log`
 puts `tail -100 /root/logcat.log`
 `cat /root/instrument.log | grep "OK (22 tests)"`
 raise unless $?.success?
