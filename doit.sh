@@ -73,6 +73,8 @@ rescue Timeout::Error
   Process.kill('TERM', pid)
   puts "Time to raise"
   puts `tail -100 /root/emulator.log`
+  puts "LOGCAT"
+  puts `ANDROID_ADB_SERVER_PORT=#{ANDROID_ADB_SERVER_PORT} /opt/android-sdk/platform-tools/adb -s emulator-#{PORT1} logcat`
   raise
 end
 
@@ -151,6 +153,8 @@ rescue Timeout::Error
   puts `tail -250 /root/emulator.log`
   puts "INSTRUMENT"
   puts `tail -250 /root/instrument.log`
+  puts "LOGCAT"
+  puts `ANDROID_ADB_SERVER_PORT=#{ANDROID_ADB_SERVER_PORT} /opt/android-sdk/platform-tools/adb -s emulator-#{PORT1} logcat`
   raise
 end
 
