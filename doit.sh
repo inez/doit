@@ -71,6 +71,8 @@ begin
 rescue Timeout::Error
   puts 'process not finished in time, killing it'
   Process.kill('TERM', pid)
+  puts "Time to raise"
+  puts `tail -100 /root/emulator.log`
   raise
 end
 
