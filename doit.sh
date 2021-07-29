@@ -161,3 +161,6 @@ end
 puts "Done with tests"
 puts `tail -100 /root/emulator.log`
 puts `tail -100 /root/instrument.log`
+puts "LOGCAT"
+puts `ANDROID_ADB_SERVER_PORT=#{ANDROID_ADB_SERVER_PORT} /opt/android-sdk/platform-tools/adb -s emulator-#{PORT1} logcat > /root/logcat.log`
+puts `tail -100 /root/logcat.log`
